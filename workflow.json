@@ -1,0 +1,559 @@
+{
+  "name": "Job Tracker copy",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        80,
+        224
+      ],
+      "id": "5bf24fe5-d06d-4076-864c-bc29d78464d6",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "454a01ba-71a4-40bd-b754-28104f2ab1a8",
+              "leftValue": "={{ $json.isJobRelated }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1376,
+        224
+      ],
+      "id": "38094921-d2e8-4820-9bdb-38858c93fdd7",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 10,
+        "filters": {
+          "q": "=(\"application submitted\" OR \"submitted successfully\" OR interview OR unfortunately OR \"we regret\" OR \"thank you for applying\" OR \"than you for your interest\" OR \"next steps\" OR offer OR hired OR \"not moving forward\" OR \"other candidates\")"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -368,
+        224
+      ],
+      "id": "7cea6551-1dc3-4ccf-b323-730630e6559f",
+      "name": "Get many messages",
+      "webhookId": "dd263706-d396-430f-af6f-2f30df502e55",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bHq2cCsb5qfOjkZX",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4f039dad-e940-4411-a7c6-a367b9eb7d42",
+              "name": "isJobRelated",
+              "value": "={{ $json.isJobRelated }}",
+              "type": "string"
+            },
+            {
+              "id": "3ff03dc7-5547-42f2-bb7a-035535b80349",
+              "name": "=company",
+              "value": "={{ $json.company }}",
+              "type": "string"
+            },
+            {
+              "id": "ad87ae05-f3a8-40ed-9e66-fd303cebc2a4",
+              "name": "=role",
+              "value": "={{ $json.role }}",
+              "type": "string"
+            },
+            {
+              "id": "ceaaf848-20b4-4ddf-99b2-8fb762a94b4c",
+              "name": "=status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "0b4717ca-3aba-4c6c-9b9e-a24f7a163661",
+              "name": "=Date Received",
+              "value": "={{ $json.dateReceived }}",
+              "type": "string"
+            },
+            {
+              "id": "bb1922f5-fec0-413f-b40b-4088e5fdbea9",
+              "name": "=notes",
+              "value": "={{ $json.notes }}",
+              "type": "string"
+            },
+            {
+              "id": "c222dbec-bbd7-43f2-9365-a1e071b572e3",
+              "name": "=jobPoster",
+              "value": "={{ $json.jobPoster }}",
+              "type": "string"
+            },
+            {
+              "id": "a59aa5dd-3b1c-46d7-85ae-41d4df5f0f80",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1152,
+        96
+      ],
+      "id": "ae011f21-677d-4041-84b1-c558612881b4",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        304,
+        -96
+      ],
+      "id": "40aee387-524b-470d-ba5d-a63f41eb7eb3",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4533ea2c-27d1-4bab-b61e-2f2f5d635bd0",
+              "name": "From",
+              "value": "={{ $json.From }}",
+              "type": "string"
+            },
+            {
+              "id": "52a7b37e-9a7a-4531-859f-94ee89384aa4",
+              "name": "internalDate",
+              "value": "={{ $json.internalDate }}",
+              "type": "string"
+            },
+            {
+              "id": "5031f687-fb14-445d-94f1-ee7e494b0f8c",
+              "name": "snippet",
+              "value": "={{ $json.snippet }}",
+              "type": "string"
+            },
+            {
+              "id": "d5038acd-f0fa-427d-87e2-22998096f82a",
+              "name": "Subject",
+              "value": "={{ $json.Subject }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        224
+      ],
+      "id": "d8588c49-eff3-480c-9b7a-84417822452c",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = [];\nfor (const item of $input.all()) {\n  const msg = item.json;\n  // Try raw Gmail API headers array first\n  const headers = msg.payload?.headers || msg.headers || [];\n  const getHeader = (name) => {\n    const h = headers.find(h => h.name?.toLowerCase() === name.toLowerCase());\n    return h ? h.value : '';\n  };\n  // Fallback to simplified Gmail node fields if headers array isn't present\n  const subject = getHeader('Subject') || msg.Subject || msg.subject || '';\n  const from = getHeader('From') || msg.From || msg.from || '';\n  const internalDateMs = msg.internalDate;\n  const dateStamp = internalDateMs\n    ? new Date(Number(internalDateMs)).toISOString().split('T')[0]\n    : null;\n  results.push({\n    json: {\n      dateStamp: dateStamp,\n      snippet: msg.snippet || msg.Snippet || '',\n      Subject: subject,\n      From: from,\n    }\n  });\n}\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        304,
+        96
+      ],
+      "id": "613f267c-f909-42b5-9c22-5dbf26172341",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3ff03dc7-5547-42f2-bb7a-035535b80349",
+              "name": "=company",
+              "value": "={{ $json.company }}",
+              "type": "string"
+            },
+            {
+              "id": "ad87ae05-f3a8-40ed-9e66-fd303cebc2a4",
+              "name": "=role",
+              "value": "={{ $json.role }}",
+              "type": "string"
+            },
+            {
+              "id": "ceaaf848-20b4-4ddf-99b2-8fb762a94b4c",
+              "name": "=status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "0b4717ca-3aba-4c6c-9b9e-a24f7a163661",
+              "name": "=Date Received",
+              "value": "={{ $json['Date Received'] }}",
+              "type": "string"
+            },
+            {
+              "id": "bb1922f5-fec0-413f-b40b-4088e5fdbea9",
+              "name": "=notes",
+              "value": "={{ $json.notes }}",
+              "type": "string"
+            },
+            {
+              "id": "c222dbec-bbd7-43f2-9365-a1e071b572e3",
+              "name": "=jobPoster",
+              "value": "={{ $json.jobPoster }}",
+              "type": "string"
+            },
+            {
+              "id": "f7affc9d-83c9-4281-b6c5-4a9ece99ac3f",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1600,
+        224
+      ],
+      "id": "409a7017-a78e-413d-b420-92b4547ad5d0",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a JSON-only extraction API. Respond with ONLY a raw JSON object.\nNo explanations. No markdown. No backticks. No preamble. Just raw JSON.\n\nAnalyze the email below and return this exact structure:\n{\n  \"isJobRelated\": true or false,\n  \"company\": \"company name or null\",\n  \"role\": \"job title or null\",\n  \"status\": \"Applied|Interviewing|Offer|Rejected|Ghosted|N/A\",\n  \"dateReceived\": \"YYYY-MM-DD or null\",\n  \"notes\": \"one sentence summary or null\",\n  \"jobPoster\": \"LinkedIn|Indeed|Jobstreet|Workday|Company Website|Other|N/A\"\n}\n\nCRITICAL RULES:\n- \"isJobRelated\" must ALWAYS be true or false — never null, never omitted\n- All other fields must always be present in the response — use null or \"N/A\" as defaults, never omit a field\n- If email content is missing or unclear, default isJobRelated to false and all other fields to null/\"N/A\"\n\nSTEP 1 — Decide isJobRelated.\n\nSet TRUE only if the email is about a SPECIFIC job the user personally applied to:\n- Application confirmation (\"We received your application\", \"Thank you for applying\")\n- Interview invitation, scheduling, or reminder\n- Assessment or test invitation tied to a specific application\n- A job offer\n- A rejection or regret notice for a role applied to\n- A recruiter or hiring manager personally following up about a specific application\n\nSet FALSE for everything else:\n- Job alert digests or \"jobs matching your search\" emails\n- \"X new jobs at companies you follow\" or recommendation emails\n- Promotional emails, newsletters, career tips, webinar invites\n- Emails the user sent (outbound)\n- Generic marketing not tied to a specific application\n- Empty or unreadable emails\n\nSTEP 2 — Extract fields.\n\nIf isJobRelated is TRUE:\n- company: actual hiring company from From field or body — NOT the ATS platform. Example: \"Workday Analog Devices <...@myworkday.com>\" → \"Analog Devices\"\n- role: exact job title from Subject, strip requisition numbers and fill dates. Example: \"Thank you for applying - R262903 Associate Embedded Software Engineer (Fill Date: 06/22/2026)\" → \"Associate Embedded Software Engineer\"\n- status:\n  - \"Applied\" = confirmation only, no decision yet\n  - \"Interviewing\" = interview invite, scheduling, or assessment\n  - \"Offer\" = explicit offer extended\n  - \"Rejected\" = rejection language present (\"we regret\", \"after careful consideration\", \"not selected\", \"unfortunately\", \"other candidates\")\n  - \"Ghosted\" = email explicitly states search is paused or closed — never infer from silence\n- dateReceived: dateStamp converted to YYYY-MM-DD, stripping the time portion\n- notes: one short factual sentence (e.g. \"Application rejected after review for Associate Embedded Software Engineer role\")\n- jobPoster:\n  - myworkday.com → \"Workday\"\n  - linkedin.com → \"LinkedIn\"\n  - indeed.com → \"Indeed\"\n  - jobstreet.com → \"Jobstreet\"\n  - greenhouse.io → \"Greenhouse\"\n  - lever.co → \"Lever\"\n  - company's own domain → \"Company Website\"\n  - anything else → \"Other\"\n\nIf isJobRelated is FALSE:\n- company, role, notes → null\n- status → \"N/A\"\n- jobPoster → \"N/A\"\n- dateReceived → dateStamp converted to YYYY-MM-DD\n\nKEY DISTINCTION: The From field often shows the ATS platform paired with the real company name — always extract the actual employer for \"company\", the platform goes in \"jobPoster\".\n\nEmail Subject: {{ $json.Subject }}\nEmail From: {{ $json.From }}\nEmail Date: {{ $json.dateStamp }}\nEmail Body: {{ $json.snippet }}",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        528,
+        96
+      ],
+      "id": "092d29b9-e855-4bab-9322-f4b2b06d3bb6",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        320
+      ],
+      "id": "7eb7a651-e912-4d8e-9a48-6014be4f52c7",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "AzpmEAFWesLsrVfY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\n\n// Try every possible key Gemini might use\nconst raw = \n  item.text ??\n  item.output ??\n  item.response ??\n  item.content ??\n  item.message?.content ??\n  JSON.stringify(item);\n\n// Convert to string if it's already an object\nconst rawStr = typeof raw === \"object\" ? JSON.stringify(raw) : String(raw);\n\n// Strip markdown code fences if present\nconst stripped = rawStr\n  .replace(/```json/gi, \"\")\n  .replace(/```/g, \"\")\n  .trim();\n\n// Extract the first valid JSON object\nconst match = stripped.match(/\\{[\\s\\S]*\\}/);\n\nif (!match) {\n  return [{ json: {\n    isJobRelated: false,\n    company: null,\n    role: null,\n    status: \"N/A\",\n    dateReceived: null,\n    notes: null,\n    jobPoster: \"N/A\",\n    parseError: \"no JSON object found in: \" + rawStr.substring(0, 100)\n  }}];\n}\n\nlet parsed;\ntry {\n  parsed = JSON.parse(match[0].trim());\n} catch(e) {\n  return [{ json: {\n    isJobRelated: false,\n    company: null,\n    role: null,\n    status: \"N/A\",\n    dateReceived: null,\n    notes: null,\n    jobPoster: \"N/A\",\n    parseError: \"JSON.parse failed: \" + e.message\n  }}];\n}\n\n// Normalize isJobRelated to boolean\nparsed.isJobRelated = parsed.isJobRelated === true || parsed.isJobRelated === \"true\";\n\n// Guarantee all fields exist\nreturn [{ json: {\n  isJobRelated: parsed.isJobRelated ?? false,\n  company: parsed.company ?? null,\n  role: parsed.role ?? null,\n  status: parsed.status ?? \"N/A\",\n  dateReceived: parsed.dateReceived ?? null,\n  notes: parsed.notes ?? null,\n  jobPoster: parsed.jobPoster ?? \"N/A\",\n  id: `${parsed.company ?? \"unknown\"}_${parsed.role ?? \"unknown\"}`.toLowerCase().replace(/\\s+/g, \"_\")\n}}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        96
+      ],
+      "id": "a36b0975-5557-44f5-9338-e4570f08f84b",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        688,
+        320
+      ],
+      "id": "dfe25cf3-411c-4e6e-9ca4-066b960fb6b1",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "F5CXdcjj1IBycK18",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -592,
+        224
+      ],
+      "id": "669c5960-24a3-4b52-98ed-cbf37b47dc94",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bHq2cCsb5qfOjkZX",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO job_applications (\n  id, company, role, status, date_received, notes, job_poster, updated_at\n)\nVALUES (\n  '{{ $json.id }}',\n  '{{ $json.company }}',\n  '{{ $json.role }}',\n  '{{ $json.status }}',\n  '{{ $json['Date Received'] }}',\n  '{{ $json.notes }}',\n  '{{ $json.jobPoster }}',\n  CURRENT_TIMESTAMP\n)\nON CONFLICT (id)\nDO UPDATE SET\n  status = EXCLUDED.status,\n  notes = EXCLUDED.notes,\n  updated_at = CURRENT_TIMESTAMP;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1824,
+        288
+      ],
+      "id": "275dab00-3565-408a-8800-45d1fdaff46e",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "JASQYzYyvDGnCmMr",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many messages": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get many messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "cbeb255a-8ddf-4470-876f-06f5a94e20f7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "745d62cd8b7460545f3a1dbbcb3da31b5067bc085912f697832798cd5fc7bb8d"
+  },
+  "nodeGroups": [],
+  "id": "w7RDDyLox0rA3YvW",
+  "tags": []
+}
